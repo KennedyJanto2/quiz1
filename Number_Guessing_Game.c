@@ -1,11 +1,13 @@
 /*
 1. Create a while loop for the game until player exits
-    1.a. create all necessary variables: max, player selection, guesses count, random number
+    1.a. create all necessary variables: player selection, guesses count, random number
+    1.a. reads max from file
 2. In loop, if player press 1, game starts
     2.a. create inner while loop for guessing game
     2.b. loop until player finds number
     2.c. takes input from player as string to test for q, else turn to int
 3. if player press 2, change max
+    3.a. writes new max to file
 4. if player press 3, quit while loop
 */
 
@@ -18,9 +20,14 @@
 int main(){
     //start of game
     int choice = 1;
-    //initialize random number max
-    int max = 10;
 
+    //initialize number max saved from previous
+    FILE *fp;
+    fp = fopen("max.txt", "r");
+    int max = 10;
+    fscanf(fp, "%d", &max);
+    fclose(fp);
+    
     //initialize random generator
     time_t t;
     srand((unsigned) time(&t));
@@ -71,7 +78,12 @@ int main(){
         }
         else if(choice == 2){ //change max of randomNumber
             printf("Enter new max (must be greater than 0):");
-            scanf("%d", &max);  
+            scanf("%d", &max);
+
+            //update saved max num in file
+            fp = fopen("max.txt", "w");
+            fprintf(fp, "%d", max);
+            fclose(fp);
         }
         else if(choice == 3){ //guits game
             printf("Thank you for playing\n");
@@ -84,6 +96,6 @@ int main(){
         }
     }
 
-
+    fclose(fp);
     return 0;
 }
